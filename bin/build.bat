@@ -1,12 +1,12 @@
 @echo off
 echo.
-echo [ä¿¡æ¯] æ‰“åŒ…Webå·¥ç¨‹ï¼Œç”Ÿæˆdistæ–‡ä»¶ã€‚
+echo [ĞÅÏ¢] ´ò°üWeb¹¤³Ì£¬Éú³ÉdistÎÄ¼ş¡£
 echo.
 
 %~d0
 cd %~dp0
 
 cd ..
-npm run build
+npm run build:prod
 
 pause

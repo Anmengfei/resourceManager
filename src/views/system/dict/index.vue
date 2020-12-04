@@ -1,21 +1,6 @@
 <template>
   <div class="app-container">
-    <div v-show="showSearch" style="margin-bottom: 20px">
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">字典名称</span><el-input v-model="queryParams.dictName" placeholder="请输入字典名称" clearable size="small" style="width: 200px;margin-right: 10px"/>
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">字典类型</span><el-input v-model="queryParams.dictType" placeholder="请输入字典类型" clearable size="small" style="width: 200px;margin-right: 10px"/>
-
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">状态</span>
-      <el-select v-model="queryParams.status" placeholder="字典状态" clearable size="small"  style="width: 200px;margin-right: 10px">
-        <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" />
-      </el-select>
-
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">创建时间</span>
-      <el-date-picker v-model="dateRange" size="small" style="width: 200px;margin-right: 10px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-
-      <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-    </div>
-    <!-- <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="字典名称" prop="dictName">
         <el-input
           v-model="queryParams.dictName"
@@ -68,7 +53,7 @@
         <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form> -->
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -291,11 +276,8 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-       this.dateRange = [];
-      // this.resetForm("queryForm");
-      this.queryParams.dictName = ''
-      this.queryParams.dictType = ''
-      this.queryParams.status = ''
+      this.dateRange = [];
+      this.resetForm("queryForm");
       this.handleQuery();
     },
     /** 新增按钮操作 */
@@ -326,19 +308,15 @@ export default {
         if (valid) {
           if (this.form.dictId != undefined) {
             updateType(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              }
+              this.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
             });
           } else {
             addType(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-              }
+              this.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
             });
           }
         }
@@ -356,7 +334,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        }).catch(function() {});
+        })
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -368,15 +346,13 @@ export default {
         }).then(function() {
           return exportType(queryParams);
         }).then(response => {
-        window.open(response.msg);
-        }).catch(function() {});
+          this.download(response.msg);
+        })
     },
     /** 清理缓存按钮操作 */
     handleClearCache() {
       clearCache().then(response => {
-        if (response.code === 200) {
-          this.msgSuccess("清理成功");
-        }
+        this.msgSuccess("清理成功");
       });
     }
   }

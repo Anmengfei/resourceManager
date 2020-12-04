@@ -1,15 +1,9 @@
 <template>
   <div class="login">
-<!--    <h3 class="title">中科瑞通后台</h3>-->
-    <div class="login_title">
-      <p>资源管理云平台</p>
-    </div>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">
-        用户登录
-      </h3>
-      <el-form-item prop="username" class="input_kuang">
-        <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" class="login-form-input">
+      <h3 class="title">若依后台管理系统</h3>
+      <el-form-item prop="username">
+        <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
@@ -38,7 +32,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 10%;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -54,7 +48,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-<!--      <span>Copyright © 2018-2019 ruoyi.vip All Rights Reserved.</span>-->
+      <span>Copyright © 2018-2020 ruoyi.vip All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -63,15 +57,9 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-import { mapState } from 'vuex'
 
 export default {
   name: "Login",
-  computed: {
-    ...mapState({
-      siteId: state => state.user.siteId
-    }),
-  },
   data() {
     return {
       codeUrl: "",
@@ -100,7 +88,6 @@ export default {
     $route: {
       handler: function(route) {
         this.redirect = route.query && route.query.redirect;
-        console.log(this.redirect)
       },
       immediate: true
     }
@@ -130,36 +117,21 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-           Cookies.set("username", this.loginForm.username, { expires: 30 });
-           
           if (this.loginForm.rememberMe) {
+            Cookies.set("username", this.loginForm.username, { expires: 30 });
             Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
             Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
           } else {
+            Cookies.remove("username");
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
           this.$store
             .dispatch("Login", this.loginForm)
-            .then((res) => {
-             
-              // var url = 'http://121.36.106.18:38081/'
-              // window.open(url,'_self')
-              
-              if (this.loginForm.username === 'admin-1') {
-                this.$router.push('/index')
-              } else {
-                window.location.href = 'http://121.36.106.18:38081/?siteId='+this.siteId
-              }
-              
-
-              // console.log('f')
-              // console.log(this.siteId)
-              // this.$router.push({ path: "/index" });
-              // this.$router.push({ path: this.redirect || "/" });
+            .then(() => {
+              this.$router.push({ path: this.redirect || "/" });
             })
-            .catch((e) => {
-              
+            .catch(() => {
               this.loading = false;
               this.getCode();
             });
@@ -173,55 +145,23 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .login {
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url('../assets/image/login.png');
-  /*background-image: url("../assets/image/login-background.jpg");*/
+  background-image: url("../assets/image/login-background.jpg");
   background-size: cover;
 }
 .title {
-  /*margin: 0px auto 30px auto;*/
-  /*text-align: center;*/
-  /*color: #707070;*/
-    width: 100%;
-    line-height: 50px;
-    text-align: center;
-    font-size: 20px;
-    color: #fff;
+  margin: 0px auto 30px auto;
+  text-align: center;
+  color: #707070;
 }
-.login_title {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.login_title p {
-  font-family: "Times New Roman", Times, serif;
-  letter-spacing: 0.1em;
-  font-size: 52px;
-  font-weight: 700;
-  background: linear-gradient(
-      to bottom,
-      rgb(236, 237, 243),
-      rgb(174, 180, 207),
-      rgb(157, 164, 197)
-  );
-  -webkit-background-clip: text;
-  color: transparent;
-}
+
 .login-form {
-  /*background-image: url('../assets/image/login.png');*/
-  background-image: url('../assets/image/loginBack.png');
-  position: absolute;
-  left: 60%;
-  top: 33%;
+  border-radius: 6px;
+  background: #ffffff;
   width: 400px;
-  background-size: 100% 100%;
-  /*border-radius: 6px;*/
-  /*background: #ffffff;*/
-  /*padding: 25px 25px 5px 25px;*/
+  padding: 25px 25px 5px 25px;
   .el-input {
     height: 38px;
     input {
@@ -263,13 +203,4 @@ export default {
 .login-code-img {
   height: 38px;
 }
-</style>
-<style>
-  .el-form-item--medium .el-form-item__content {
-    width: 80%;
-    margin-left: 10%;
-  }
-  /*.input_kuang .login-form-input .el-input__inner {*/
-  /*   background: blue!important;*/
-  /*}*/
 </style>

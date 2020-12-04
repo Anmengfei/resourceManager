@@ -8,11 +8,9 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL: 'http://121.36.106.18:38080',
-  // baseURL: 'http://vue.ruoyi.vip/prod-api',
-  // baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: process.env.VUE_APP_BASE_API,
   // 超时
-  timeout: 100000
+  timeout: 10000
 })
 // request拦截器
 service.interceptors.request.use(config => {
@@ -45,18 +43,10 @@ service.interceptors.response.use(res => {
         })
       })
     } else if (code === 500) {
-      if(msg === 'String index out of range: -1') {
-        Message({
-          message: "请使用用户名-userId登录",
-          type: 'error'
-        })
-      } else {
-        Message({
-          message: msg,
-          type: 'error'
-        })
-      }
-      
+      Message({
+        message: msg,
+        type: 'error'
+      })
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       Notification.error({

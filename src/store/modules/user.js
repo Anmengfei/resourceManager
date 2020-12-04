@@ -7,8 +7,7 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    permissions: [],
-    siteId: ''
+    permissions: []
   },
 
   mutations: {
@@ -26,9 +25,6 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
-    },
-    SET_SITEID: (state, siteId) => {
-      state.siteId = siteId
     }
   },
 
@@ -42,12 +38,7 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
           setToken(res.token)
-          console.log("登录的名字1", username)
-          localStorage.setItem("userName", user.userName)
           commit('SET_TOKEN', res.token)
-          commit('SET_SITEID', res.site_id)
-          localStorage.setItem("deptId", res.site_id)
-
           resolve()
         }).catch(error => {
           reject(error)
@@ -60,7 +51,6 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(res => {
           const user = res.user
-          
           const avatar = user.avatar == "" ? require("@/assets/image/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
           if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', res.roles)
@@ -68,16 +58,15 @@ const user = {
           } else {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
-          commit('SET_NAME', `${user.userName}-${user.userId}`)
+          commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
-          
           resolve(res)
         }).catch(error => {
           reject(error)
         })
       })
     },
-
+    
     // 退出系统
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {

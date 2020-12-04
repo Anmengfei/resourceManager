@@ -1,19 +1,6 @@
 <template>
   <div class="app-container">
-    <div v-show="showSearch" style="margin-bottom: 20px">
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">公告标题</span><el-input v-model="queryParams.noticeTitle" placeholder="请输入公告标题" clearable size="small" style="width: 200px;margin-right: 10px"/>
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">操作人员</span><el-input v-model="queryParams.createBy" placeholder="请输入操作人员" clearable size="small" style="width: 200px;margin-right: 10px"/>
-
-      <span style="font-size: 14px;color: #606266;font-weight: 700;margin-right: 10px">用户状态</span>
-      <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable size="small" style="width: 200px;margin-right: 10px">
-        <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" />
-      </el-select>
-
-      <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-    </div>
-
-    <!-- <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="公告标题" prop="noticeTitle">
         <el-input
           v-model="queryParams.noticeTitle"
@@ -34,14 +21,19 @@
       </el-form-item>
       <el-form-item label="类型" prop="noticeType">
         <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable size="small">
-          <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" />
+          <el-option
+            v-for="dict in typeOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form> -->
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -167,12 +159,12 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="内容">
-              <Editor v-model="form.noticeContent" />
+              <editor v-model="form.noticeContent" :min-height="192"/>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <div slot="footer" class="dialog-footer" style="padding-top:30px">
+      <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
@@ -229,7 +221,7 @@ export default {
           { required: true, message: "公告标题不能为空", trigger: "blur" }
         ],
         noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "blur" }
+          { required: true, message: "公告类型不能为空", trigger: "change" }
         ]
       }
     };
@@ -284,10 +276,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      // this.resetForm("queryForm");
-      this.queryParams.noticeTitle = ''
-      this.queryParams.createBy = ''
-      this.queryParams.noticeType = ''
+      this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
@@ -318,19 +307,15 @@ export default {
         if (valid) {
           if (this.form.noticeId != undefined) {
             updateNotice(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              }
+              this.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
             });
           } else {
             addNotice(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-              }
+              this.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
             });
           }
         }
@@ -348,7 +333,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        }).catch(function() {});
+        })
     }
   }
 };

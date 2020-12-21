@@ -430,6 +430,8 @@
 </template>
 
 <script>
+import { getToken } from "@/api/login";
+import { setToken } from '@/utils/auth'
 export default {
   name: "index",
   data() {
@@ -438,10 +440,29 @@ export default {
       version: "3.2.1",
     };
   },
+  mounted() {
+    this.getUrl()
+  },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
+    getUrl() {
+      var str = window.location.search
+      if(str === '') {
+        console.log('str为空')
+      }else {
+        var userId = str.split('=')[1]
+        localStorage.setItem('userId', userId)
+        this.getTokenByUserId(userId)
+      }
+    },
+    getTokenByUserId(id) {
+      getToken(id).then((res) => {
+        setToken(res.token)
+        commit('SET_TOKEN', res.token)
+      })
+    }
   },
 };
 </script>

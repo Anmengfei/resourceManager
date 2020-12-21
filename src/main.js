@@ -13,6 +13,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
+import less from 'less'
+
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -33,6 +35,7 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+// Vue.prototype.Qiniu = qiniu
 
 Vue.prototype.msgSuccess = function (msg) {
   this.$message({ showClose: true, message: msg, type: "success" });
@@ -51,6 +54,8 @@ Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 
 Vue.use(permission)
+Vue.use(less)
+// Vue.use(qiniu)
 
 /**
  * If you don't want to use mock-server

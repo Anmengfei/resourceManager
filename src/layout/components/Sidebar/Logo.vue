@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: '若依管理系统',
+      title: '资源管理云平台',
       logo: logoImg
     }
   }

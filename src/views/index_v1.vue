@@ -35,6 +35,8 @@ import LineChart from './dashboard/LineChart'
 import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
+import { getTokenById } from "@/api/login";
+import { setToken, getToken } from '@/utils/auth'
 
 const lineChartData = {
   newVisitis: {
@@ -69,10 +71,34 @@ export default {
       lineChartData: lineChartData.newVisitis
     }
   },
+  mounted() {
+    if(getToken()) {
+      console.log("有token")
+    } else {
+      this.getTokenByUserId()
+    }
+    
+  },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
-    }
+    },
+    
+    getTokenByUserId() {
+      var id = localStorage.getItem('userId')
+      getTokenById(id).then((res) => {
+        
+        if(res.token === null) {
+          window.location.href = 'http://www.qingcheng.net.cn/qingcheng/#/login'
+        } else {
+          console.log("")
+          setToken(res.token)
+          //this.$router.push({ path: this.redirect || "/" });
+          this.$router.push({path: '/index'})
+        }
+        
+      })
+    },
   }
 }
 </script>

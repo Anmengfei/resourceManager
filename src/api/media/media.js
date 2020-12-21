@@ -15,4 +15,37 @@ export function updateMedia(id, mediaFile) {
     })
 }
 
+export function shareMedia(query) {
+  return request({
+    url: `/media/file/commonlist`,
+    method: 'get',
+    params: query
+  })
+}
+
+
+export function allMedia(id) {
+  return request({
+    url: `/media/file/alllist?deptId=${id}`,
+    method: 'get'
+  })
+}
+
+export function assignDept(data) {
+  return request({
+    url: `/media/file/addMediaDept`,
+    method: 'post',
+    data: data
+  })
+}
+
+export function assignPeople(data) {
+  return request({
+    url: `/media/file/addMediaUser`,
+    method: 'post',
+    params: data
+  })
+}
+
+
 

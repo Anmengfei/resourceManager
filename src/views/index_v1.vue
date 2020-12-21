@@ -37,6 +37,7 @@ import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import { getTokenById } from "@/api/login";
 import { setToken, getToken } from '@/utils/auth'
+import { getUserProfile } from "@/api/system/user";
 
 const lineChartData = {
   newVisitis: {
@@ -80,6 +81,11 @@ export default {
     
   },
   methods: {
+    getUser() {
+      getUserProfile().then(response => {
+        localStorage.setItem('deptId', response.data.deptId)
+      });
+    },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     },
@@ -93,12 +99,14 @@ export default {
         } else {
           console.log("")
           setToken(res.token)
+          this.getUser()
           //this.$router.push({ path: this.redirect || "/" });
           this.$router.push({path: '/index'})
         }
         
       })
     },
+
   }
 }
 </script>

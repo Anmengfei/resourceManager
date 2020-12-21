@@ -66,7 +66,6 @@
       getCourse() {
         this.params.userId = localStorage.getItem('userId')
         findCourseList(this.page,this.size,this.params).then((res) => {
-          
           if(res.success){
 
             this.total = res.queryResult.total;

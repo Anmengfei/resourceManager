@@ -58,6 +58,7 @@ import { getCodeImg, getTokenById } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 import { setToken } from '@/utils/auth'
+import { getUserProfile } from "@/api/system/user";
 
 export default {
   name: "Login",
@@ -99,12 +100,11 @@ export default {
     this.getTokens()
   },
   methods: {
-    // getCode() {
-    //   getCodeImg().then(res => {
-    //     this.codeUrl = "data:image/gif;base64," + res.img;
-    //     this.loginForm.uuid = res.uuid;
-    //   });
-    // },
+    getUser() {
+      getUserProfile().then(response => {
+        localStorage.setItem('deptId', response.data.deptId)
+      });
+    },
     getTokens() {
       var str = unescape(window.location.search)
       console.log("urlddd", str)
@@ -120,6 +120,7 @@ export default {
         } else {
           console.log("")
           setToken(res.token)
+          this.getUser()
           //this.$router.push({ path: this.redirect || "/" });
           this.$router.push({path: '/index'})
         }
@@ -144,6 +145,7 @@ export default {
             .dispatch("Login", this.loginForm)
             .then(() => {
               localStorage.setItem("password", this.loginForm.password)
+              this.getUser()
               this.$router.push({ path: this.redirect || "/" });
             })
             .catch(() => {

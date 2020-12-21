@@ -58,21 +58,28 @@
     </el-table>
     <!--分页-->
     <el-col :span="24" class="toolbar">
-
-      <el-pagination background layout="prev, pager, next" @current-change="changePage" :page-size="this.params.size"
-                     :total="total" :current-page="this.params.page"
-                     style="float:right;">
-      </el-pagination>
+      <el-pagination
+            v-show="total>0"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 20, 40]" 
+            :page-size="pagesize"         
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">    
+        </el-pagination>
     </el-col>
   </div>
 </template>
 <script>
-  import { media_list } from "@/api/media/media";
+  import { shareMedia } from "@/api/media/media";
   import utilApi from '@/utils/utils';
   export default{
     props: ['ischoose'],
     data(){
       return {
+        currentPage:1, //初始页
+        pagesize:10,
         params:{
           page:1,//页码
           size:10,//每页显示个数
@@ -89,6 +96,14 @@
       }
     },
     methods:{
+      handleSizeChange: function (size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+        },
+        handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+        },
       formatCreatetime(row, column){
         var createTime = new Date(row.date);
         if (createTime) {
@@ -138,13 +153,13 @@
         // })
       },
       query(){
-        this.params.userId = localStorage.getItem('userId')
         
-        media_list(this.params.page,this.params.size,this.params).then((res)=>{
-          
-          if (res.success) {
-            this.total = res.queryResult.total
-            this.list = res.queryResult.list
+        this.params.userId = localStorage.getItem('userId')
+        shareMedia(this.params).then((res)=>{
+          console.log(res)
+          if (res.code === 200) {
+            this.total = res.total
+            this.list = res.rows
           }
         })
       },
@@ -158,11 +173,12 @@
           username: '',
           userId: localStorage.getItem('userId')
         }
-        media_list(this.params.page,this.params.size,this.params).then((res)=>{
-          
-          if (res.success) {
-            this.total = res.queryResult.total
-            this.list = res.queryResult.list
+
+        shareMedia(this.params).then((res)=>{
+          console.log("重置", res)
+          if (res.code === 200) {
+            this.total = res.total
+            this.list = res.rows
           }
         })
       }

@@ -50,7 +50,7 @@
         courses: [
           ],
         params: {
-          "username": "admin",
+         
         },
         sels: [],//列表选中列
         imgUrl:''
@@ -64,7 +64,7 @@
       },
       //获取课程列表
       getCourse() {
-        
+        this.params.userId = localStorage.getItem('userId')
         findCourseList(this.page,this.size,this.params).then((res) => {
           
           if(res.success){

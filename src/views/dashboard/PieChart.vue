@@ -52,21 +52,21 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['Java基础', 'Python趣味编程', '数据爬虫', '人脸识别', '数据科学基础']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '热门课程观看次数',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 320, name: 'Java基础' },
+              { value: 240, name: 'Python趣味编程' },
+              { value: 149, name: '数据爬虫' },
+              { value: 100, name: '人脸识别' },
+              { value: 59, name: '数据科学基础' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

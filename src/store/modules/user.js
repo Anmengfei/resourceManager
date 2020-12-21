@@ -37,6 +37,7 @@ const user = {
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
+          localStorage.setItem("username", res.username)
           setToken(res.token)
           commit('SET_TOKEN', res.token)
           resolve()
@@ -74,6 +75,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
+          localStorage.clear()
           removeToken()
           resolve()
         }).catch(error => {

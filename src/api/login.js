@@ -1,17 +1,15 @@
 import request from '@/utils/request'
 
 // 登录方法
-export function login(username, password, code, uuid) {
+export function login(username, password) {
   const data = {
     username,
-    password,
-    code,
-    uuid
+    password
   }
   return request({
     url: '/login',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
@@ -35,6 +33,13 @@ export function logout() {
 export function getCodeImg() {
   return request({
     url: '/captchaImage',
+    method: 'get'
+  })
+}
+
+export function getTokenById(userId) {
+  return request({
+    url: `/getToken?userid=${userId}`,
     method: 'get'
   })
 }

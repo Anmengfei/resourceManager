@@ -7,6 +7,18 @@ Vue.use(Router)
 import Layout from '@/layout'
 import ParentView from '@/components/ParentView';
 
+import course_list from '@/views/course/course_list.vue';
+import course_add from '@/views/course/course_add.vue';
+import course_manage from '@/views/course/course_manage.vue';
+import course_summary from '@/views/course/course_manage/course_summary.vue';
+import course_picture from '@/views/course/course_manage/course_picture.vue';
+import course_baseinfo from '@/views/course/course_manage/course_baseinfo.vue';
+import course_marketinfo from '@/views/course/course_manage/course_marketinfo.vue';
+import course_teacher from '@/views/course/course_manage/course_teacher.vue';
+import course_plan from '@/views/course/course_manage/course_plan.vue';
+import course_pub from '@/views/course/course_manage/course_pub.vue';
+
+
 /**
  * Note: 路由配置项
  *
@@ -53,6 +65,11 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/error/401'], resolve),
     hidden: true
   },
+  // {
+  //   path: '/course_add',
+  //   component: (resolve) => require(['@/views/course/course_add'], resolve),
+  //   hidden: true
+  // },
   {
     path: '',
     component: Layout,
@@ -60,7 +77,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: (resolve) => require(['@/views/index'], resolve),
+        component: (resolve) => require(['@/views/index_v1'], resolve),
         name: '首页',
         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
       }
@@ -118,7 +135,34 @@ export const constantRoutes = [
         meta: { title: '修改生成配置' }
       }
     ]
+  },
+
+
+  {
+    path: '/course',
+    component: Layout,
+    name: '课程管理',
+    hidden: false,
+    iconCls: 'el-icon-document',
+    children: [
+      { path: '/course/course_list', name: '我的课程',component: course_list,hidden: true, meta: { title: '我的课程' } },
+      { path: '/course/add/base', name: '新增课程',component: course_add,hidden: true, meta: { title: '新增课程' } },
+      { path: '/course/manager/:courseid', name: '管理课程',component: course_manage,hidden: true ,meta: { title: '管理课程' },
+        children: [
+          { path: '/course/manage/plan/:courseid', name: '课程计划',component: course_plan,hidden: false ,meta: { title: '课程计划' }},
+          { path: '/course/manage/baseinfo/:courseid', name: '基本信息',component: course_baseinfo,hidden: false ,meta: { title: '基本信息' }},
+          { path: '/course/manage/picture/:courseid', name: '课程图片',component: course_picture,hidden: false ,meta: { title: '课程图片' }},
+          { path: '/course/manage/marketinfo/:courseid', name: '营销信息',component: course_marketinfo,hidden: false ,meta: { title: '营销信息' }},
+          { path: '/course/manage/teacher/:courseid', name: '教师信息',component: course_teacher,hidden: false,meta: { title: '教师信息' }},
+          { path: '/course/manage/pub/:courseid', name: '发布课程',component: course_pub,hidden: false,meta: { title: '发布课程' }},
+          { path: '/course/manage/summary/:courseid', name: '课程首页',component: course_summary,hidden: false ,meta: { title: '课程首页' }}
+        ]}
+    
+    ]
   }
+
+
+ 
 ]
 
 export default new Router({

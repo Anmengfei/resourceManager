@@ -3,7 +3,7 @@
     <el-row >
       <el-col :span="8"  :offset=2 >
         <el-card :body-style="{ padding: '10px' }" style="height:250px;margin-top:10px;">
-          <img src="/cms/static/images/add.jpg" class="image" height="150px">
+          <img :src="imgUrl" class="image" height="150px">
           <div style="padding: 10px;">
             <span>课程名称</span>
             <div class="bottom clearfix">
@@ -53,7 +53,7 @@
          
         },
         sels: [],//列表选中列
-        imgUrl:''
+        imgUrl:'../../assets/image/addFile.png'
       }
     },
     methods: {

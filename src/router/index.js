@@ -145,17 +145,17 @@ export const constantRoutes = [
     hidden: false,
     iconCls: 'el-icon-document',
     children: [
-      { path: '/course/course_list', name: '我的课程',component: course_list,hidden: true, meta: { title: '我的课程' } },
-      { path: '/course/add/base', name: '新增课程',component: course_add,hidden: true, meta: { title: '新增课程' } },
-      { path: '/course/manager/:courseid', name: '管理课程',component: course_manage,hidden: true ,meta: { title: '管理课程' },
+      { path: '/course_list', name: '我的课程',component: course_list,hidden: true, meta: { title: '我的课程' } },
+      { path: '/add/base', name: '新增课程',component: course_add,hidden: true, meta: { title: '新增课程' } },
+      { path: '/manager/:courseid', name: '管理课程',component: course_manage,hidden: true ,meta: { title: '管理课程' },
         children: [
-          { path: '/course/manage/plan/:courseid', name: '课程计划',component: course_plan,hidden: false ,meta: { title: '课程计划' }},
-          { path: '/course/manage/baseinfo/:courseid', name: '基本信息',component: course_baseinfo,hidden: false ,meta: { title: '基本信息' }},
-          { path: '/course/manage/picture/:courseid', name: '课程图片',component: course_picture,hidden: false ,meta: { title: '课程图片' }},
-          { path: '/course/manage/marketinfo/:courseid', name: '营销信息',component: course_marketinfo,hidden: false ,meta: { title: '营销信息' }},
-          { path: '/course/manage/teacher/:courseid', name: '教师信息',component: course_teacher,hidden: false,meta: { title: '教师信息' }},
-          { path: '/course/manage/pub/:courseid', name: '发布课程',component: course_pub,hidden: false,meta: { title: '发布课程' }},
-          { path: '/course/manage/summary/:courseid', name: '课程首页',component: course_summary,hidden: false ,meta: { title: '课程首页' }}
+          { path: '/manage/plan/:courseid', name: '课程计划',component: course_plan,hidden: false ,meta: { title: '课程计划' }},
+          { path: '/manage/baseinfo/:courseid', name: '基本信息',component: course_baseinfo,hidden: false ,meta: { title: '基本信息' }},
+          { path: '/manage/picture/:courseid', name: '课程图片',component: course_picture,hidden: false ,meta: { title: '课程图片' }},
+          { path: '/manage/marketinfo/:courseid', name: '营销信息',component: course_marketinfo,hidden: false ,meta: { title: '营销信息' }},
+          { path: '/manage/teacher/:courseid', name: '教师信息',component: course_teacher,hidden: false,meta: { title: '教师信息' }},
+          { path: '/manage/pub/:courseid', name: '发布课程',component: course_pub,hidden: false,meta: { title: '发布课程' }},
+          { path: '/manage/summary/:courseid', name: '课程首页',component: course_summary,hidden: false ,meta: { title: '课程首页' }}
         ]}
     
     ]

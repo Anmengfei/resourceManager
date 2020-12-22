@@ -36,7 +36,7 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import { getTokenById } from "@/api/login";
-import { setToken, getToken } from '@/utils/auth'
+import { setToken, getToken, removeToken } from '@/utils/auth'
 import { getUserProfile } from "@/api/system/user";
 
 const lineChartData = {
@@ -74,7 +74,9 @@ export default {
   },
   mounted() {
     if(getToken()) {
-      console.log("有token")
+      console.log("有token",getToken())
+      removeToken()
+      this.getTokenByUserId()
     } else {
       this.getTokenByUserId()
     }

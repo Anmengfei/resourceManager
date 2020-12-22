@@ -57,7 +57,7 @@
 import { getCodeImg, getTokenById } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-import { setToken } from '@/utils/auth'
+import { setToken, removeToken, getToken } from '@/utils/auth'
 import { getUserProfile } from "@/api/system/user";
 
 export default {
@@ -106,6 +106,9 @@ export default {
       });
     },
     getTokens() {
+      console.log("传递过来的token是", getToken())
+      removeToken()
+      console.log("删除之后的token是", getToken())
       var str = unescape(window.location.search)
       console.log("urlddd", str)
       var userId = str.split('=')[2]
@@ -113,6 +116,7 @@ export default {
       this.getTokenByUserId(userId)
     },
     getTokenByUserId(id) {
+      
       getTokenById(id).then((res) => {
         console.log("2212121212121", res)
         if(res.token === null) {

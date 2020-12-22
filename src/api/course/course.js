@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import user from '../../store/modules/user'
 
 export function findCourseList(page, size, query) {
     return request({
@@ -73,16 +74,16 @@ export function deleteCoursePic (courseid) {
   })
 }
 
-export function preview(id) {
+export function preview(id, userId) {
   return request({
-    url: `/course/preview/${id}`,
+    url: `/course/preview/${id}/${userId}`,
     method: 'post',
   })
 }
 
-export function publish(id) {
+export function publish(id, userId) {
   return request({
-    url: `/course/publish/${id}`,
+    url: `/course/publish/${id}/${userId}`,
     method: 'post',
   })
 }

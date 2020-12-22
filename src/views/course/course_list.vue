@@ -3,9 +3,9 @@
     <el-row >
       <el-col :span="8"  :offset=2 >
         <el-card :body-style="{ padding: '10px' }" style="height:250px;margin-top:10px;">
-          <img :src="imgUrl" class="image" height="150px">
-          <div style="padding: 10px;">
-            <span>课程名称</span>
+          <img :src="imgUrl" class="imageAdd" height="220px">
+          <div style="position:absolute;margin-top:-40px;z-index=200;" >
+            <!-- <span>课程名称</span> -->
             <div class="bottom clearfix">
               <time class="time"></time>
               <router-link class="mui-tab-item" :to="{path:'/course/add/base'}">
@@ -53,7 +53,7 @@
          
         },
         sels: [],//列表选中列
-        imgUrl:'../../assets/image/addFile.png'
+        imgUrl:'http://58.119.112.14:11013/cms-manager/file/avatar/2020/12/22/20201222111630.png'
       }
     },
     methods: {
@@ -133,6 +133,11 @@
   .image {
     width: 100%;
     display: block;
+  }
+  .imageAdd {
+    width: 100%;
+     display: block;
+     z-index: 1;
   }
 
   .clearfix:before,

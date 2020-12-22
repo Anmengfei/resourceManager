@@ -9,7 +9,7 @@
           <div class="text item">
             <el-button type="primary"  @click.native="preview" >课程预览</el-button>
             <br/><br/>
-            <span v-if="previewurl && previewurl!=''"><a :href="previewurl" target="_blank">点我查看课程预览页面 </a> </span>
+            <span v-if="previewurl && previewurl!=''" style="color:red;"><a :href="previewurl" target="_blank">点我查看课程预览页面 </a> </span>
           </div>
         </el-card>
         <el-card class="box-card">
@@ -25,7 +25,7 @@
               状态：已发布<br/>
               <el-button type="primary"  @click.native="publish" >修改发布</el-button>
               <br/><br/>
-              <span><a :href="'http://www.zhongkeruitong.top/show/snake_python/#/videoclass?class_id='+this.courseid" target="_blank">点我查看课程详情页面 </a> </span>
+              <span style="color:red;"><a :href="'http://www.qingcheng.net.cn/qingcheng/#/videoclass?class_id='+ this.courseid + '&userId=' + this.userId" target="_blank">点我查看课程详情页面 </a> </span>
             </div>
           </div>
         </el-card>
@@ -44,16 +44,17 @@ export default{
       courseid: '',
       course: {"id": "", "name": "", "status": ""},
       previewurl: '',
-      userName: ''
+      userName: '',
+      userId: ''
     }
   },
   methods:{
     //预览
     preview(){
         //调用课程管理服务的预览接口，得到课程预览url
-      preview(this.courseid).then((res) => {
+      preview(this.courseid, this.userId).then((res) => {
         if(res.success){
-          this.$message.error('预览页面生成成功，请点击下方预览链接');
+          this.$message.success('预览页面生成成功，请点击下方预览链接');
           if(res.previewUrl){
             //预览url
             this.previewurl = res.previewUrl
@@ -65,7 +66,7 @@ export default{
     },
     publish(){
       //课程发布
-      publish(this.courseid).then(res=>{
+      publish(this.courseid, this.userId).then(res=>{
           if(res.success){
               this.$message.success("发布成功，请点击下边的链接查询课程详情页面")
             //查询课程信息
@@ -90,7 +91,8 @@ export default{
   mounted(){
     //课程id
     this.courseid = this.$route.params.courseid;
-    this.userName = 'admin'
+    this.userName = 'admin';
+    this.userId = localStorage.getItem('userId');
     //查询课程信息
     this.getCourseView();
   }

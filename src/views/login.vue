@@ -1,4 +1,9 @@
 <template>
+  <!--<div>-->
+    <!--<div style="text-align: center;width: 500px;height: 500px;position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%)">-->
+      <!--<img src="../assets/logo/loading.gif" style="width: 100%">-->
+    <!--</div>-->
+  <!--</div>-->
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">资源管理云平台</h3>
@@ -69,7 +74,7 @@ export default {
       loginForm: {
         username: "admin",
         password: "admin123"
-        
+
       },
       loginRules: {
         username: [
@@ -78,7 +83,7 @@ export default {
         password: [
           { required: true, trigger: "blur", message: "密码不能为空" }
         ],
-         
+
       },
       loading: false,
       redirect: undefined
@@ -112,11 +117,12 @@ export default {
       var str = unescape(window.location.search)
       console.log("urlddd", str)
       var userId = str.split('=')[2]
+      // var userId = 1
       localStorage.setItem('userId', userId)
       this.getTokenByUserId(userId)
     },
     getTokenByUserId(id) {
-      
+
       getTokenById(id).then((res) => {
         console.log("2212121212121", res)
         if(res.token === null) {
@@ -128,7 +134,7 @@ export default {
           //this.$router.push({ path: this.redirect || "/" });
           this.$router.push({path: '/index'})
         }
-        
+
       })
     },
     getCookie() {

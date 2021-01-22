@@ -7,14 +7,14 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
-        
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
 
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        <!--<el-tooltip content="源码地址" effect="dark" placement="bottom">-->
+          <!--<ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />-->
+        <!--</el-tooltip>-->
+
+        <!--<el-tooltip content="文档地址" effect="dark" placement="bottom">-->
+          <!--<ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />-->
+        <!--</el-tooltip>-->
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
@@ -36,9 +36,9 @@
           <el-dropdown-item @click.native="setting = true">
             <span>布局设置</span>
           </el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <span>退出登录</span>
-          </el-dropdown-item>
+          <!--<el-dropdown-item divided @click.native="logout">-->
+            <!--<span>退出登录</span>-->
+          <!--</el-dropdown-item>-->
         </el-dropdown-menu>
       </el-dropdown>
     </div>

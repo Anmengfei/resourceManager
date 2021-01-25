@@ -19,9 +19,9 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="课件名称" prop="userName">
+          <el-form-item label="课件名称" prop="fileOriginalName">
             <el-input
-              v-model="queryParams.userName"
+              v-model="queryParams.fileOriginalName"
               placeholder="请输入课件名称"
               clearable
               size="small"
@@ -29,33 +29,26 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="所属课组" prop="phonenumber">
-            <el-input
-              v-model="queryParams.phonenumber"
-              placeholder="请输入所属课组"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
+          <el-form-item label="课件分类">
+           <el-cascader
+              class="inputWidth"
+              expand-trigger="hover"
+              :options="categoryList"
+              v-model="categoryActive"
+              :props="props">
+          </el-cascader>
           </el-form-item>
           <el-form-item label="课件类型" prop="status">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="课件类型"
-              clearable
-              size="small"
-              style="width: 240px"
-            >
+            <el-select v-model="queryParams.category" placeholder="请选择课件类别">
               <el-option
-                v-for="dict in statusOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
+                v-for="item in typeOptions"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间">
+          <!-- <el-form-item label="创建时间">
             <el-date-picker
               v-model="dateRange"
               size="small"
@@ -66,7 +59,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
             ></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -185,13 +178,14 @@
 </template>
 
 <script>
-import { allMedia, assignDept, assignPeople } from "@/api/media/media";
+import { allMedia, assignDept, assignPeople, searchAllMedia } from "@/api/media/media";
 import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import utilApi from '@/utils/utils';
 import { listUser } from "@/api/system/user";
+import { category_findlist } from "@/api/course/course";
 
 
 
@@ -200,6 +194,14 @@ export default {
   components: { Treeselect },
   data() {
     return {
+       typeOptions: ["图片", "视频", "文档"],
+        props: {
+            value: 'id',
+            label:'name',
+            children:'children'
+          },
+        categoryList: [],
+        categoryActive: [],
         currentMediaId: '',
         currentPage:1, //初始页
         pagesize:10,
@@ -264,10 +266,11 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userName: undefined,
-        phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        deptId: undefined,
+        fileOriginalName: '',
+        category: '',
+        mt: '',
+        st: ''
       },
       queryParams2: {
         pageNum: 1,
@@ -322,17 +325,15 @@ export default {
     this.getList2()
     this.getTreeselect();
     this.getTreeselect2()
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("sys_user_sex").then(response => {
-      this.sexOptions = response.data;
-    });
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response.msg;
-    });
+    this.getCategoryList()
   },
   methods: {
+    getCategoryList() {
+          category_findlist().then(res=>{
+            this.categoryList = res.children;
+            console.log(this.categoryList)
+          })
+        },
       share(row) {
           this.open = true;
           this.currentMediaId = row.mediaId
@@ -350,6 +351,9 @@ export default {
       console.log("deptId", id)
       
       this.loading = true;
+      var params = {
+        deptId: id
+      }
       allMedia(id).then(response => {
           console.log("返回的数据", response)
           this.userList = response.rows;
@@ -451,7 +455,17 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.page = 1;
-      this.getList(this.deptId);
+      this.queryParams.deptId = this.deptId
+      this.queryParams.mt = this.categoryActive[0]
+      this.queryParams.st = this.categoryActive[1]
+        
+      // this.getList(this.deptId);
+      searchAllMedia(this.queryParams).then(response => {
+          // console.log("返回的数据", response)
+          this.userList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        })
     },
    handleQuery2() {
       this.queryParams2.page = 1;
@@ -459,16 +473,21 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange2 = [];
-      this.resetForm2("queryForm2");
-      this.handleQuery2();
+      this.categoryActive = [];
+      this.queryParams.fileOriginalName = ''
+      this.queryParams.deptId = ''
+      this.queryParams.st = ''
+      this.queryParams.mt = ''
+      this.queryParams.category = ''
+      
+      this.getList(localStorage.getItem('deptId'))
     },
     /** 重置按钮操作 */
-    resetQuery() {
-      this.dateRange = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
+    // resetQuery() {
+    //   this.dateRange = [];
+    //   this.resetForm("queryForm");
+    //   this.handleQuery();
+    // },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.userId);

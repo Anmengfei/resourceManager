@@ -6,15 +6,23 @@
       <el-input v-model="params.tag" style="width:160px"></el-input> -->
       课件名称：
       <el-input v-model="params.fileOriginalName" style="width:160px"></el-input>
-      <!-- 处理状态：
-      <el-select v-model="params.processStatus" placeholder="请选择处理状态">
+      课件分类：
+      <el-cascader
+          class="inputWidth"
+          expand-trigger="hover"
+          :options="categoryList"
+          v-model="categoryActive"
+          :props="props">
+      </el-cascader>
+      课件类别：
+      <el-select v-model="params.category" placeholder="请选择课件类别">
         <el-option
-          v-for="item in processStatusList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id">
+          v-for="item in typeOptions"
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
-      </el-select> -->
+      </el-select>
      
       <el-button type="primary" v-on:click="query" size="small" style="margin-left:10px;">查询</el-button>
       <el-button type="primary" v-on:click="clearQuery" size="small" style="margin-left:10px;">重置</el-button>
@@ -30,9 +38,11 @@
       </el-table-column>
       <!-- <el-table-column prop="name" label="文件名称" width="220">
       </el-table-column> -->
-      <!-- <el-table-column prop="url" label="访问url" width="260">
-      </el-table-column> -->
-      <el-table-column prop="type" label="课件类型" width="150" align="center">
+      <el-table-column prop="mt" label="方向" width="260">
+      </el-table-column>
+      <el-table-column prop="st" label="分类" width="260">
+      </el-table-column>
+      <el-table-column prop="category" label="课件类型" width="150" align="center">
       </el-table-column>
       <!-- <el-table-column prop="size" label="文件大小" width="120">
       </el-table-column>
@@ -68,11 +78,20 @@
 </template>
 <script>
   import { media_list } from "@/api/media/media";
+  import { category_findlist } from "@/api/course/course";
   import utilApi from '@/utils/utils';
   export default{
     props: ['ischoose'],
     data(){
       return {
+         typeOptions: ["图片", "视频", "文档"],
+        props: {
+            value: 'id',
+            label:'name',
+            children:'children'
+          },
+        categoryList: [],
+        categoryActive: [],
         params:{
           page:1,//页码
           size:10,//每页显示个数
@@ -80,7 +99,10 @@
           fileName:'',//文件名称
           processStatus:'',//处理状态
           username: '',
-          userId: ''
+          userId: '',
+          mt: '',
+          st: '',
+          category: ''
         },
         listLoading:false,
         list:[],
@@ -89,6 +111,12 @@
       }
     },
     methods:{
+      getCategoryList() {
+          category_findlist().then(res=>{
+            this.categoryList = res.children;
+            console.log(this.categoryList)
+          })
+        },
       formatCreatetime(row, column){
         var createTime = new Date(row.date);
         if (createTime) {
@@ -110,6 +138,7 @@
         }
       },
       choose(mediaFile){
+        console.log("选择", mediaFile)
           if(mediaFile.status !='102' && mediaFile.status !='101'){
             this.$message.error('该文件未处理，不允许选择');
             return ;
@@ -139,6 +168,8 @@
       },
       query(){
         this.params.userId = localStorage.getItem('userId')
+        this.params.mt = this.categoryActive[0]
+         this.params.st = this.categoryActive[1]
         
         media_list(this.params.page,this.params.size,this.params).then((res)=>{
           
@@ -156,8 +187,12 @@
           fileName:'',//文件名称
           processStatus:'',//处理状态
           username: '',
-          userId: localStorage.getItem('userId')
+          userId: localStorage.getItem('userId'),
+          st: '',
+          mt: '',
+          category: ''
         }
+        this.categoryActive = []
         media_list(this.params.page,this.params.size,this.params).then((res)=>{
           
           if (res.success) {
@@ -174,6 +209,7 @@
     mounted() {
       //默认查询页面
       this.query()
+      this.getCategoryList()
       //初始化处理状态
       this.processStatusList = [
         {

@@ -31,6 +31,14 @@ export function allMedia(id) {
   })
 }
 
+export function searchAllMedia(data) {
+  return request({
+    url: `/media/file/alllist`,
+    method: 'get',
+    params: data
+  })
+}
+
 export function assignDept(data) {
   return request({
     url: `/media/file/addMediaDept`,

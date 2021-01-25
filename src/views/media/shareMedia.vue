@@ -6,15 +6,23 @@
       <el-input v-model="params.tag" style="width:160px"></el-input> -->
       课件名称：
       <el-input v-model="params.fileOriginalName" style="width:160px"></el-input>
-      <!-- 处理状态：
-      <el-select v-model="params.processStatus" placeholder="请选择处理状态">
+      课件分类：
+      <el-cascader
+          class="inputWidth"
+          expand-trigger="hover"
+          :options="categoryList"
+          v-model="categoryActive"
+          :props="props">
+      </el-cascader>
+      课件类别：
+      <el-select v-model="params.category" placeholder="请选择课件类别">
         <el-option
-          v-for="item in processStatusList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id">
+          v-for="item in typeOptions"
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
-      </el-select> -->
+      </el-select>
      
       <el-button type="primary" v-on:click="query" size="small" style="margin-left:10px;">查询</el-button>
       <el-button type="primary" v-on:click="clearQuery" size="small" style="margin-left:10px;">重置</el-button>
@@ -28,12 +36,18 @@
       </el-table-column>
       <el-table-column prop="prename" label="课件名称" align="center">
       </el-table-column>
+      <el-table-column prop="mt" label="方向" width="260">
+      </el-table-column>
+      <el-table-column prop="st" label="分类" width="260">
+      </el-table-column>
+      <el-table-column prop="category" label="课件类型" width="150" align="center">
+      </el-table-column>
       <!-- <el-table-column prop="name" label="文件名称" width="220">
       </el-table-column> -->
       <!-- <el-table-column prop="url" label="访问url" width="260">
       </el-table-column> -->
-      <el-table-column prop="type" label="课件类型" width="150" align="center">
-      </el-table-column>
+      <!-- <el-table-column prop="type" label="课件类型" width="150" align="center">
+      </el-table-column> -->
       <!-- <el-table-column prop="size" label="文件大小" width="120">
       </el-table-column>
       <el-table-column prop="status" label="处理状态" width="100" :formatter="formatProcessStatus">
@@ -73,11 +87,20 @@
 </template>
 <script>
   import { shareMedia } from "@/api/media/media";
+  import { category_findlist } from "@/api/course/course";
   import utilApi from '@/utils/utils';
   export default{
     props: ['ischoose'],
     data(){
       return {
+        typeOptions: ["图片", "视频", "文档"],
+        props: {
+            value: 'id',
+            label:'name',
+            children:'children'
+          },
+        categoryList: [],
+        categoryActive: [],
         currentPage:1, //初始页
         pagesize:10,
         params:{
@@ -96,6 +119,12 @@
       }
     },
     methods:{
+      getCategoryList() {
+          category_findlist().then(res=>{
+            this.categoryList = res.children;
+            console.log(this.categoryList)
+          })
+        },
       handleSizeChange: function (size) {
                 this.pagesize = size;
                 console.log(this.pagesize)  //每页下拉显示数据
@@ -152,9 +181,26 @@
         //  }
         // })
       },
+      getList() {
+        console.log("加载")
+        var params = {
+          page: 1,
+          size: 10,
+          userId: localStorage.getItem('userId')
+        }
+        shareMedia(params).then((res)=>{
+          console.log(res)
+          if (res.code === 200) {
+            this.total = res.total
+            this.list = res.rows
+          }
+        })
+      },
       query(){
         
         this.params.userId = localStorage.getItem('userId')
+        this.params.mt = this.categoryActive[0]
+         this.params.st = this.categoryActive[1]
         shareMedia(this.params).then((res)=>{
           console.log(res)
           if (res.code === 200) {
@@ -164,6 +210,7 @@
         })
       },
       clearQuery() {
+        
         this.params = {
           page:1,//页码
           size:10,//每页显示个数
@@ -171,48 +218,36 @@
           fileName:'',//文件名称
           processStatus:'',//处理状态
           username: '',
-          userId: localStorage.getItem('userId')
+          userId: localStorage.getItem('userId'),
+          st: '',
+          mt: '',
+          category: '',
+          fileOriginalName: ''
         }
-
-        shareMedia(this.params).then((res)=>{
-          console.log("重置", res)
-          if (res.code === 200) {
-            this.total = res.total
-            this.list = res.rows
-          }
-        })
+        this.categoryActive = []
+        this.getList()
+        // shareMedia(this.params).then((res)=>{
+        //   console.log("重置", res)
+        //   if (res.code === 200) {
+        //     this.total = res.total
+        //     this.list = res.rows
+        //   }
+        // })
+        
       }
     },
     created(){
         //默认第一页
-      this.params.page = Number.parseInt(this.$route.query.page||1);
+      
+      // this.getCategoryList()
+      // this.getList()
+      //this.params.page = Number.parseInt(this.$route.query.page||1);
     },
     mounted() {
       //默认查询页面
-      this.query()
-      //初始化处理状态
-      this.processStatusList = [
-        {
-          id:'',
-          name:'全部'
-        },
-        {
-          id:'100',
-          name:'处理中'
-        },
-        {
-          id:'101',
-          name:'处理成功'
-        },
-        {
-          id:'103',
-          name:'处理失败'
-        },
-        {
-          id:'102',
-          name:'无需处理'
-        }
-      ]
+      this.getCategoryList()
+      this.getList()
+      
     }
   }
 </script>

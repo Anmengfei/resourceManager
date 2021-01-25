@@ -82,8 +82,19 @@
 
       </el-form>
     </el-dialog>
-    <el-dialog title="选择媒资文件" :visible.sync="mediaFormVisible">
-      <media-list v-bind:ischoose="true" @choosemedia="choosemedia"></media-list>
+    <el-dialog title="选择媒资文件" :visible.sync="mediaFormVisible" >
+       <el-tabs v-model="activeName" class="tabs" @tab-click="handleTabs">
+        <el-tab-pane label="我的课件" name="first" class="label_top">
+          <!-- <media-list v-if="myMediaFlag" v-bind:ischoose="true"></media-list> -->
+           <media-list v-if="myMediaFlag" v-bind:ischoose="true" @choosemedia="choosemedia"></media-list>
+        </el-tab-pane>
+        <el-tab-pane label="共享课件" name="second" class="label_top">
+          <!-- <share-media v-if="shareFlag" v-bind:ischoose="true"></share-media> -->
+          <share-media v-if="shareFlag" v-bind:ischoose="true" @choosemedia="choosemedia"></share-media>
+        </el-tab-pane>
+
+      </el-tabs>
+      <!-- <media-list v-bind:ischoose="true" @choosemedia="choosemedia"></media-list> -->
     </el-dialog>
   </div>
 </template>
@@ -92,13 +103,17 @@
   
   import { savemedia, addTeachplan, findTeachplanInfo, deleteTeachplanInfo, findTeachplanList } from "@/api/course/course";
   import mediaList from '@/views/media/media_list.vue';
-
+  import shareMedia from '@/views/media/shareMedia.vue';
   export default {
     components:{
-      mediaList
+      mediaList,
+      shareMedia
     },
     data() {
       return {
+        activeName: 'first',
+      myMediaFlag: true,
+      shareFlag: false,
         userId: '',
         courseId: '',
         mediaFormVisible:false,
@@ -142,6 +157,16 @@
       }
     },
     methods: {
+      handleTabs(tab, event) {
+       console.log(tab, event);
+       if(tab.name === 'first') {
+         this.myMediaFlag = true
+         this.shareFlag = false
+       } else {
+         this.myMediaFlag = false
+         this.shareFlag = true
+       } 
+    },
         //选择视频，打开窗口
       choosevideo(data){
           //得到当前的课程计划
@@ -155,6 +180,7 @@
       },
       //保存选择的视频
       choosemedia(mediaId,fileOriginalName,mediaUrl){
+        console.log("plan选择视频")
         this.mediaFormVisible = false;
         //保存视频到课程计划表中
         let teachplanMedia ={}

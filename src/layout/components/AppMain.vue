@@ -11,6 +11,7 @@
 
 <script>
 import Global from "@/layout/components/global.js";
+import Qiniu from "@/assets/js/qiniu.min.js"
 
 export default {
   name: 'AppMain',

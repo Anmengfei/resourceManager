@@ -70,7 +70,7 @@ export default{
           if(res.success){
               this.$message.success("发布成功，请点击下边的链接查询课程详情页面")
             //查询课程信息
-            this.getcourse()
+            // this.getcourse()
           }else{
             this.$message.error(res.message)
           }
@@ -78,7 +78,7 @@ export default{
       })
     },
     getCourseView(){
-      findCourseView(this.courseid, this.userName).then(res=>{
+      findCourseView(this.courseid, this.userId).then(res=>{
         if(res && res.courseBase){
             //获取课程状态
             this.course.status = res.courseBase.status;

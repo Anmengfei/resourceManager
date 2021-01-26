@@ -189,7 +189,7 @@
                 this.mediaFile.type=file.type
                 this.mediaFile.url=sourceLink
                 this.mediaFile.name=res.key
-                this.mediaFile.username = localStorage.getItem('username')
+                this.mediaFile.username = localStorage.getItem('userId')
                 updateMedia(res.key,this.mediaFile).then((res) => {
                   if(res.success){
                     this.$message.success('文件保存成功');

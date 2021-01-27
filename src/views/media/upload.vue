@@ -2,10 +2,10 @@
   <div id="courseForm" class="courseForm">
     <el-form :model="courseForm" label-width="150px" :rules="courseRules" ref="courseForm" class="marginCenter">
       <el-form-item label="课件名称" prop="prename" >
-        <el-input v-model="courseForm.prename" style="width: 200px;" placeholder="请输入课件名称"></el-input>
+        <el-input v-model="courseForm.prename" style="width: 300px;" placeholder="请输入课件名称,例如:Java开发第一节"></el-input>
       </el-form-item>
       <el-form-item label="课件类别" prop="category">
-        <el-select v-model="courseForm.category" placeholder="请选择课件类别" clearable size="small">
+        <el-select v-model="courseForm.category" placeholder="请选择课件类别" clearable size="small" style="width: 300px;">
           <el-option
             v-for="dict in typeOptions"
             :key="dict"
@@ -16,6 +16,7 @@
       </el-form-item>
       <el-form-item label="课程分类" prop="categoryActive">
         <el-cascader
+          style="width: 300px;"
           class="inputWidth"
           expand-trigger="hover"
           :options="categoryList"

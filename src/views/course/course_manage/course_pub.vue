@@ -69,6 +69,7 @@ export default{
       publish(this.courseid, this.userId).then(res=>{
           if(res.success){
               this.$message.success("发布成功，请点击下边的链接查询课程详情页面")
+              this.getCourseView()
             //查询课程信息
             // this.getcourse()
           }else{

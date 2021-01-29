@@ -124,7 +124,8 @@
           // 选择课程分类存储到categoryActive
            this.courseForm.mt=  this.categoryActive[0]//大分类
            this.courseForm.st=  this.categoryActive[1]//小分类
-           this.courseForm.username= localStorage.getItem('username')
+           console.log("ASASA", localStorage.getItem('userId'))
+           this.courseForm.username= localStorage.getItem('userId')
           
            console.log("ceshi", this.courseForm)
           addCourseBase(this.courseForm).then(res=>{
@@ -150,7 +151,7 @@
         this.courseForm.st = '',
         this.courseForm.description = '',
         this.courseForm.username = '',
-        this.courseForm.id = '',
+       
         this.courseForm.name = '',
         this.courseForm.users = ''
         

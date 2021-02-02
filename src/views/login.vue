@@ -116,8 +116,8 @@ export default {
       console.log("删除之后的token是", getToken())
       var str = unescape(window.location.search)
       console.log("urlddd", str)
-      var userId = str.split('=')[2]
-      // var userId = 1
+      // var userId = str.split('=')[2]
+      var userId = 1
       localStorage.setItem('userId', userId)
       this.getTokenByUserId(userId)
     },

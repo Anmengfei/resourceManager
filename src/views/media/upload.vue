@@ -9,7 +9,7 @@
 
 
   <script>
-    
+    require('../../assets/js/qiniu.min')
     import { updateMedia } from "@/api/media/media";
     // import qiniu from 'qiniu-js';
     // import Qiniu from 'qiniu-js';

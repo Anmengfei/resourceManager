@@ -28,8 +28,12 @@
         </el-card>
       </el-col>
 
+      
+    </el-row>
+    <el-row class="secondRow">
       <!--分页-->
-      <el-col :span="24" class="toolbar">
+      <el-col :span="12"></el-col>
+      <el-col :span="12" class="toolbar">
         <el-pagination background layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="size"
                        :total="total" :current-page="page"
                        style="float:right;">
@@ -148,5 +152,8 @@
 
   .clearfix:after {
     clear: both
+  }
+  .secondRow {
+    margin-top:60px
   }
 </style>

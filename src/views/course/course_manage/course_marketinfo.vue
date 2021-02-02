@@ -9,7 +9,7 @@
         <br/>
         金额（元）：<el-input :disabled="this.courseMarketForm.charge == '203002'?false:true" v-model="courseMarketForm.price" ></el-input>
       </el-form-item>
-      <el-form-item label="课程有效期" prop="expires">
+      <!-- <el-form-item label="课程有效期" prop="expires">
         <b v-for="valid in validList">
           <el-radio v-model="courseMarketForm.valid" :label="valid.sdId" >{{valid.sdName}}</el-radio>&nbsp;&nbsp;
         </b>
@@ -18,7 +18,7 @@
         <el-date-picker :disabled="this.courseMarketForm.valid == '204002'?false:true"  type="date" placeholder="选择日期" v-model="courseMarketForm.startTime"></el-date-picker>
         结束时间：
         <el-date-picker :disabled="this.courseMarketForm.valid == '204002'?false:true"  type="date" placeholder="选择日期" v-model="courseMarketForm.endTime"></el-date-picker>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="服务咨询QQ" prop="qq">
         <el-input v-model="courseMarketForm.qq" ></el-input>
       </el-form-item>

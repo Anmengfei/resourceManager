@@ -17,7 +17,8 @@ import course_marketinfo from '@/views/course/course_manage/course_marketinfo.vu
 import course_teacher from '@/views/course/course_manage/course_teacher.vue';
 import course_plan from '@/views/course/course_manage/course_plan.vue';
 import course_pub from '@/views/course/course_manage/course_pub.vue';
-
+import course_work from '@/views/course/course_manage/course_work.vue';
+import course_student from '@/views/course/course_manage/course_student.vue';
 
 /**
  * Note: 路由配置项
@@ -155,6 +156,10 @@ export const constantRoutes = [
           { path: '/course/manage/marketinfo/:courseid', name: '营销信息',component: course_marketinfo,hidden: false ,meta: { title: '营销信息' }},
           { path: '/course/manage/teacher/:courseid', name: '教师信息',component: course_teacher,hidden: false,meta: { title: '教师信息' }},
           { path: '/course/manage/pub/:courseid', name: '发布课程',component: course_pub,hidden: false,meta: { title: '发布课程' }},
+          
+          { path: '/course/manage/work/:courseid', name: '课程作业',component: course_work,hidden: false,meta: { title: '课程作业' }},          
+          { path: '/course/manage/student/:courseid', name: '学生列表',component: course_student,hidden: false,meta: { title: '学生列表' }},
+          
           { path: '/course/manage/summary/:courseid', name: '课程首页',component: course_summary,hidden: false ,meta: { title: '课程首页' }}
         ]}
     

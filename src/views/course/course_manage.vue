@@ -61,6 +61,10 @@
       <!-- <router-link class="mui-tab-item" :to="{path:'/course/manage/pub/'+this.courseid}"> -->
         <el-menu-item index="7">发布课程</el-menu-item>
       <!-- </router-link> -->
+        <el-menu-item index="8">课程作业</el-menu-item>
+
+        <!-- </router-link> -->
+        <el-menu-item index="9">学生列表</el-menu-item>
     </el-menu>
     <!-- <router-view class="main"></router-view> -->
     <div v-if="activeIndex === '2'">
@@ -81,6 +85,12 @@
     <div v-if="activeIndex === '7'">
       <course-pub></course-pub>
     </div>
+     <div v-if="activeIndex === '8'">
+      <course-work></course-work>
+    </div>
+    <div v-if="activeIndex === '9'">
+      <course-student></course-student>
+    </div>
   </div>
 </template>
 <script>
@@ -90,6 +100,8 @@ import coursePictureinfo from '@/views/course/course_manage/course_picture.vue';
 import coursePlan from '@/views/course/course_manage/course_plan.vue';
 import courseTeacher from '@/views/course/course_manage/course_teacher.vue';
 import coursePub from '@/views/course/course_manage/course_pub.vue';
+import courseWork from '@/views/course/course_manage/course_work.vue';
+import courseStudent from '@/views/course/course_manage/course_student.vue';
   export default {
     components: {
       courseBaseinfo,
@@ -97,7 +109,9 @@ import coursePub from '@/views/course/course_manage/course_pub.vue';
       coursePictureinfo,
       coursePlan,
       courseTeacher,
-      coursePub
+      coursePub,
+      courseWork,
+      courseStudent
     },
     data() {
       return {

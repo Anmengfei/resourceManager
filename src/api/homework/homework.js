@@ -70,10 +70,11 @@ export function checkUpdate(params) {
 }
 
 // 学生列表
-export function getStdList(page, pagesize, id) {
+export function getStdList(page, pagesize, id, params) {
   return request({
     url: `/course/studentList/allStudent/${page}/${pagesize}/${id}`,
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 

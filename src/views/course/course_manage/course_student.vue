@@ -24,8 +24,9 @@
       </el-table-column>
       <el-table-column prop="content" label="性别" align="center"  :show-overflow-tooltip="true">
            <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.sex === 1">男</el-tag>
-            <el-tag type="success" v-else>女</el-tag>
+            <el-tag type="success" v-if="scope.row.sex === '1' ">女</el-tag>
+            <el-tag type="success" v-else-if="scope.row.sex === '0'">男</el-tag>
+            <el-tag type="success" v-else>未设置</el-tag>
             </template>
       </el-table-column>
       <el-table-column prop="homework_count" label="作业提交数" align="center"  :show-overflow-tooltip="true">
@@ -298,19 +299,23 @@
       
       handleSizeChange: function (size) {
                 this.pagesize = size;
+                this.getList()
                 console.log(this.pagesize)  //每页下拉显示数据
         },
         handleCurrentChange: function(currentPage){
                 this.currentPage = currentPage;
+                this.getList()
                 console.log(this.currentPage)  //点击第几页
         },
 
         handleSizeChange2: function (size) {
                 this.pagesize2 = size;
+                this.getStdInfo(this.stdId)
                 console.log(this.pagesize2)  //每页下拉显示数据
         },
         handleCurrentChange2: function(currentPage){
                 this.currentPage2 = currentPage;
+                this.getStdInfo(this.stdId)
                 console.log(this.currentPage2)  //点击第几页
         },
       formatCreatetime(row, column){
@@ -371,10 +376,10 @@
       
       
       getStdInfo(id) {
-          getStdDetail(id).then((res) => {
+          getStdDetail(this.currentPage2, this.pagesize2, id).then((res) => {
               console.log("ASASA", res)
-              this.userList2 = res.data
-              this.total2 = res.data.length
+              this.userList2 = res.data.rows
+              this.total2 = res.data.total
           })
       },
       viewDetail(row) {
@@ -387,10 +392,10 @@
       
       getList() {
         
-          getStdList(this.courseid).then(res=>{
+          getStdList(this.currentPage, this.pagesize, this.courseid).then(res=>{
             console.log("res", res.data)
-            this.list = res.data
-            this.total = res.data.length
+            this.list = res.data.rows
+            this.total = res.data.total
             console.log("总数", this.total)
             
           })

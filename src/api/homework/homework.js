@@ -70,16 +70,16 @@ export function checkUpdate(params) {
 }
 
 // 学生列表
-export function getStdList(id) {
+export function getStdList(page, pagesize, id) {
   return request({
-    url: `/course/studentList/allStudent/${id}`,
+    url: `/course/studentList/allStudent/${page}/${pagesize}/${id}`,
     method: 'get'
   })
 }
 
-export function getStdDetail(userId) {
+export function getStdDetail(page, pagesize, userId) {
   return request({
-    url: `/course/studentList/studentSubmitDetail/${userId}`,
+    url: `/course/studentList/studentSubmitDetail/${page}/${pagesize}/${userId}`,
     method: 'get'
   })
 }

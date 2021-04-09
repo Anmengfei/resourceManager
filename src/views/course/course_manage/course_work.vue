@@ -227,6 +227,7 @@
     props: ['ischoose'],
     data(){
       return {
+        currentStatus: undefined,
         alreadyCheck: false,
         responseForm: {
           homeworkId: undefined,
@@ -311,18 +312,18 @@
     },
     methods:{
       stdSubmited() {
+        this.currentStatus = 1
         var params = {
-          // id: this.workId,
-          id: 1,
-          status: 1
+          id: this.workId,
+          status: this.currentStatus
         }
         this.findStduList(params)
       },
       stdSubmitNo() {
+        this.currentStatus = 0
         var params = {
-          // id: this.workId,
-          id: 1,
-          status: 0
+          id: this.workId,
+          status: this.currentStatus
         }
         this.findStduList(params)
       },
@@ -347,19 +348,33 @@
       
       handleSizeChange: function (size) {
                 this.pagesize = size;
+                this.getList()
                 console.log(this.pagesize)  //每页下拉显示数据
         },
         handleCurrentChange: function(currentPage){
                 this.currentPage = currentPage;
+                this.getList()
                 console.log(this.currentPage)  //点击第几页
         },
 
         handleSizeChange2: function (size) {
                 this.pagesize2 = size;
+               
+                var params = {
+                  
+                  id: this.workId,
+                  status: this.currentStatus
+                }
+                this.findStduList(params)
                 console.log(this.pagesize2)  //每页下拉显示数据
         },
         handleCurrentChange2: function(currentPage){
                 this.currentPage2 = currentPage;
+                var params = {
+                  id: this.workId,
+                  status: this.currentStatus
+                }
+                this.findStduList(params)
                 console.log(this.currentPage2)  //点击第几页
         },
       formatCreatetime(row, column){
@@ -624,8 +639,7 @@
         console.log("查看作业", row)
         this.workId = row.id
         var params = {
-          // id: row.id
-          id: 1,
+          id: row.id,
           status: 1
         }
         this.findStduList(params)

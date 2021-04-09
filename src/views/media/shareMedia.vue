@@ -31,7 +31,7 @@
       </router-link> -->
     </el-form>
     <!--列表-->
-    <el-table :data="list" highlight-current-row v-loading="listLoading" style="width: 100%;">
+    <el-table :data="list.slice((currentPage-1)*pagesize,currentPage*pagesize)" highlight-current-row v-loading="listLoading" style="width: 100%;">
       <el-table-column type="index" label="序号" width="80" align="center">
       </el-table-column>
       <el-table-column prop="prename" label="课件名称" align="center">

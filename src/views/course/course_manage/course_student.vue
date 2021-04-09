@@ -4,7 +4,7 @@
     <el-form :model="queryParams" style="margin-left:3%;margin-bottom:15px;">
      
       学生名称：
-      <el-input v-model="queryParams.user_name" style="width:160px"></el-input>
+      <el-input v-model="queryParams.userName" style="width:160px"></el-input>
       手机号：
       <el-input v-model="queryParams.phonenumber" style="width:160px"></el-input>
      
@@ -98,7 +98,7 @@
 
     <!-- 作业详情 -->
     <el-dialog title="作业详情" :visible.sync="workOpen" width="1200px" append-to-body>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
          
           <el-col :span="24">
 
@@ -122,7 +122,7 @@
             </el-form>
 
           </el-col>
-        </el-row>
+        </el-row> -->
         
 
         <el-table  :data="userList2" >
@@ -241,11 +241,8 @@
         queryParams:{
           page:1,//页码
           size:10,//每页显示个数
-          tag:'',//标签
-          fileName:'',//文件名称
-          processStatus:'',//处理状态
-          username: '',
-          userId: ''
+          phonenumber: '',
+          userName: ''
         },
         listLoading:false,
         list:[],
@@ -350,10 +347,7 @@
         //调用父组件的choosemedia方法
         this.$emit('choosemedia',mediaFile.mediaId,mediaFile.prename,mediaFile.url);
       },
-      changePage(page){
-        this.queryParams.page = page;
-        this.query()
-      },
+      
 
       
       viewLink2(row) {
@@ -418,20 +412,35 @@
       },
       queryWork() {},
       query(){
-        
-       var params = {
-         courseId: this.courseid,
-         endTime: this.queryParams.endTime,
-         workName: this.queryParams.workName
-       }
-        findWorkList(this.currentPage, this.pagesize, params).then((res)=>{
-          console.log(res)
-          if (res.code === 200) {
-           
+        console.log("123")
+       if(this.queryParams.userName === '' && this.queryParams.phonenumber !== '') {
+          var params = {
+            phonenumber: this.queryParams.phonenumber
+          }
+        } else if(this.queryParams.userName !== '' && this.queryParams.phonenumber === '') {
+          var params = {
+            userName: this.queryParams.userName
+          }
+        } else if(this.queryParams.userName !== '' && this.queryParams.phonenumber !== '') {
+          var params = {
+            userName: this.queryParams.userName,
+            phonenumber: this.queryParams.phonenumber
+          }
+        } else {
+          var params = null
+        }
+        if(params === null) {
+          this.getList()
+        } else {
+          getStdList(this.currentPage, this.pagesize, this.courseid, params).then(res=>{
+            console.log("res", res.data)
             this.list = res.data.rows
             this.total = res.data.total
-          }
-        })
+            console.log("总数", this.total)
+            
+          })
+        }
+        
       },
      
       clearQueryWork() {},

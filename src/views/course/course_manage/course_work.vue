@@ -158,13 +158,13 @@
         <el-table  :data="userList2" >
          <el-table-column type="index" label="序号" width="80" align="center" />
           <el-table-column label="学生名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
-          <el-table-column label="作业名称" align="center" prop="workName" :show-overflow-tooltip="true" />
-          <el-table-column label="提交状态" align="center"  :show-overflow-tooltip="true">
+          <!-- <el-table-column label="作业名称" align="center" prop="workName" :show-overflow-tooltip="true" width="200"/> -->
+          <!-- <el-table-column label="提交状态" align="center"  :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.homeworkStatus === 0" type="danger">未提交</el-tag>
                <el-tag v-else type="success">已提交</el-tag>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="批改状态" align="center"  :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.checkStatus === 0" type="danger">未批改</el-tag>
@@ -176,7 +176,7 @@
               <el-button
                 size="small" type="success" v-if="scope.row.homeworkStatus === 1"  @click="viewLink2(scope.row)">查看附件
               </el-button>
-               <el-tag v-else type="danger">未提交作业</el-tag>
+               <el-tag v-else :disabled="disabledTrue" type="danger">未提交作业</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="提交时间" align="center" prop="submitTime" :show-overflow-tooltip="true" />
@@ -227,6 +227,7 @@
     props: ['ischoose'],
     data(){
       return {
+        disabledTrue: true,
         currentStatus: undefined,
         alreadyCheck: false,
         responseForm: {
@@ -637,10 +638,11 @@
       },
       viewWork(row) {
         console.log("查看作业", row)
+        this.currentStatus = 1
         this.workId = row.id
         var params = {
           id: row.id,
-          status: 1
+          status: this.currentStatus
         }
         this.findStduList(params)
         this.workOpen = true
@@ -682,7 +684,35 @@
           checkContent: ''
         }
       },
-      queryWork() {},
+      queryWork() {
+        if(this.queryParams2.userName === '' && this.queryParams2.checkStatus !== undefined) {
+          var params = {
+            checkStatus: this.queryParams2.checkStatus,
+            id:this.workId,
+            status: this.currentStatus
+          }
+        } else if(this.queryParams2.userName !== '' && this.queryParams2.checkStatus === undefined) {
+          var params = {
+            userName: this.queryParams2.userName,
+            id:this.workId,
+            status: this.currentStatus
+          }
+        } else if(this.queryParams2.userName !== '' && this.queryParams2.checkStatus !== undefined) {
+          var params = {
+            userName: this.queryParams2.userName,
+            checkStatus: this.queryParams2.checkStatus,
+            id:this.workId,
+            status: this.currentStatus
+          }
+        } else {
+          var params = {
+            id:this.workId,
+            status: this.currentStatus
+          }
+        }
+        this.findStduList(params)
+
+      },
       query(){
         
        var params = {
@@ -700,7 +730,20 @@
         })
       },
      
-      clearQueryWork() {},
+      clearQueryWork() {
+        this.queryParams2 = {
+          page:1,//页码
+          size:10,//每页显示个数
+          workName: '',
+          endTime: '',
+          courseId: ''
+        }
+        var params = {
+          id: this.workId,
+          status: this.currentStatus
+        }
+        this.findStduList(params)
+      },
       clearQuery() {
         
         this.queryParams = {

@@ -370,7 +370,10 @@
       
       
       getStdInfo(id) {
-          getStdDetail(this.currentPage2, this.pagesize2, id).then((res) => {
+        var params = {
+          courseId: this.courseid
+        }
+          getStdDetail(this.currentPage2, this.pagesize2, id, params).then((res) => {
               console.log("ASASA", res)
               this.userList2 = res.data.rows
               this.total2 = res.data.total

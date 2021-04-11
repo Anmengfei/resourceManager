@@ -78,10 +78,11 @@ export function getStdList(page, pagesize, id, params) {
   })
 }
 
-export function getStdDetail(page, pagesize, userId) {
+export function getStdDetail(page, pagesize, userId, params) {
   return request({
     url: `/course/studentList/studentSubmitDetail/${page}/${pagesize}/${userId}`,
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 

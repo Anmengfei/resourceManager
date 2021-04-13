@@ -167,14 +167,14 @@
           </el-table-column> -->
           <el-table-column label="批改状态" align="center"  :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.checkStatus === 0" type="danger">未批改</el-tag>
-               <el-tag v-else type="success">已批改</el-tag>
+              <el-tag v-if="scope.row.homeworkStatus === 1" type="danger">未批改</el-tag>
+               <el-tag v-if="scope.row.homeworkStatus === 2" type="success">已批改</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="作业附件" align="center"  :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-button
-                size="small" type="success" v-if="scope.row.homeworkStatus === 1"  @click="viewLink2(scope.row)">查看附件
+                size="small" type="success" v-if="scope.row.homeworkLink !== null"  @click="viewLink2(scope.row)">查看附件
               </el-button>
                <el-tag v-else :disabled="disabledTrue" type="danger">未提交作业</el-tag>
             </template>
@@ -318,6 +318,8 @@
           id: this.workId,
           status: this.currentStatus
         }
+        this.pagesize2 = 10
+        this.currentPage2 = 1
         this.findStduList(params)
       },
       stdSubmitNo() {
@@ -326,6 +328,8 @@
           id: this.workId,
           status: this.currentStatus
         }
+        this.pagesize2 = 10
+        this.currentPage2 = 1
         this.findStduList(params)
       },
       cancel() {
@@ -601,7 +605,7 @@
         console.log("SAA", row)
         this.responseForm.checkContent = row.checkContent
         this.responseForm.homeworkId = row.id
-        if(row.checkStatus === 0) {
+        if(row.homeworkStatus !== 2) {
           this.alreadyCheck = false
         } else {
           this.alreadyCheck = true
